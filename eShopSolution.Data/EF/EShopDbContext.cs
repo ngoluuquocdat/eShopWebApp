@@ -1,5 +1,6 @@
 ﻿using eShopSolution.Data.Configurations;
 using eShopSolution.Data.Entities;
+using eShopSolution.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,8 @@ namespace eShopSolution.Data.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //áp dụng config vào 
-            modelBuilder.ApplyConfiguration(new AppConfigConfiguration());  
+            //configure dùng Fluent API
+            modelBuilder.ApplyConfiguration(new AppConfigConfiguration());  //áp dụng config vào 
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ProductInCategoryConfiguration());
@@ -30,9 +31,22 @@ namespace eShopSolution.Data.EF
             modelBuilder.ApplyConfiguration(new ProductTranslationConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+
+            // data seeding
+            // truyền vào mảng các new obj, truyền 1 obj cũng được
+            // cách đơn giản là viết ở đây luôn, nhưng nhiều record, table thì code sẽ rất rối
+
+            //modelBuilder.Entity<AppConfig>().HasData(
+            //    new AppConfig { Key = "HomeTitle", Value = "This is home page of eShop" },
+            //    new AppConfig { Key = "HomeKeyword", Value = "This is keyword of eShop" },
+            //    new AppConfig { Key = "HomeDescription", Value = "This is description of eShop" }
+            //);
+
+            // sử dụng extension method Seed() đã đc viết 
+            modelBuilder.Seed();
             //base.OnModelCreating(modelBuilder);
         }
-        
+
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
