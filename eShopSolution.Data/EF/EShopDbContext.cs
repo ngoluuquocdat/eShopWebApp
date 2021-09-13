@@ -32,11 +32,7 @@ namespace eShopSolution.Data.EF
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
             //base.OnModelCreating(modelBuilder);
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseMySQL("server=localhost;database=QLSV;user=root;password=123456; SSL Mode = None");
-        }
+        
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }

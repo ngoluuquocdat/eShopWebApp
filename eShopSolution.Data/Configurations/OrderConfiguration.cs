@@ -13,7 +13,22 @@ namespace eShopSolution.Data.Configurations
         {
             builder.ToTable("Orders");
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.ShipEmail).IsUnicode(false).HasMaxLength(50); // sẽ ra nvarchar(50) trong Db
+
+            //builder.Property(x => x.Id).UseIdentityColumn();    mysql thì ko cần dùng cái này (?)
+            // nếu khóa chính có kiểu là int rồi thì nó tự auto Indentity luôn,
+            // còn khóa chính set kiểu khác (vd: string) thì ko có Indentity
+
+            builder.Property(x => x.OrderDate).HasDefaultValue(DateTime.Now);
+
+            builder.Property(x => x.ShipEmail).IsRequired().IsUnicode(false).HasMaxLength(50);
+
+            builder.Property(x => x.ShipAddress).IsRequired().HasMaxLength(200);
+
+
+            builder.Property(x => x.ShipName).IsRequired().HasMaxLength(200);
+
+
+            builder.Property(x => x.ShipPhoneNumber).IsRequired().HasMaxLength(200);
         }
     }
 }
