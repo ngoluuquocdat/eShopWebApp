@@ -12,6 +12,7 @@ namespace eShopSolution.Data.Entities
 
         public bool IsDefault { get; set; }
 
+        // navigation properties
         public List<ProductTranslation> ProductTranslations { get; set; }
 
         public List<CategoryTranslation> CategoryTranslations { get; set; }
