@@ -14,10 +14,9 @@ namespace eShopSolution.Data.Configurations
             builder.ToTable("Products");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Price).IsRequired(true);
-            builder.Property(x => x.OriginalPrice).IsRequired();
+            builder.Property(x => x.OriginalPrice).IsRequired();             // mặc định là true luôn, k cần điền
             builder.Property(x => x.Stock).IsRequired().HasDefaultValue(0);    // gtri mặc định là 0
             builder.Property(x => x.ViewCount).IsRequired().HasDefaultValue(0);
-            builder.Property(x => x.SeoAlias).IsRequired();     // mặc định là true luôn, k cần điền
         }
     }
 }
