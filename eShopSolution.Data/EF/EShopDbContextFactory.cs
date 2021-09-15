@@ -21,7 +21,7 @@ namespace eShopSolution.Data.EF
             var connectionString = configuration.GetConnectionString("eShopSolutionDb");
 
             var optionsBuilder = new DbContextOptionsBuilder<EShopDbContext>();
-            optionsBuilder.UseMySQL(connectionString);
+            optionsBuilder.UseSqlServer(connectionString);
 
             return new EShopDbContext(optionsBuilder.Options);  // trả về 1 DbContext
         }

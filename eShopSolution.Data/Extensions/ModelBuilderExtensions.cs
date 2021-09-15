@@ -1,5 +1,6 @@
 ﻿using eShopSolution.Data.Entities;
 using eShopSolution.Data.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -113,7 +114,7 @@ namespace eShopSolution.Data.Extensions
                     SeoDescription = "Áo nam tập gym",
                     SeoTitle = "Áo nam tập gym",
                     Details = "chi tiết sản phẩm",
-                    Description = ""
+                    Description = "Áo sát nách khoét sâu, form rộng"
                 },
                 new ProductTranslation()
                 {
@@ -123,9 +124,9 @@ namespace eShopSolution.Data.Extensions
                     LanguageId = "en-US",
                     SeoAlias = "men-gym-shirt",
                     SeoDescription = "Sleeveless shirt for men gymmer",
-                    SeoTitle = "Deep cut sleeveless shirt, oversized from",
+                    SeoTitle = "Sleeveless shirt for men gymmer",
                     Details = "product details",
-                    Description = ""
+                    Description = "Deep cut sleeveless shirt, oversized formed"
                 }
             );
 
@@ -137,6 +138,44 @@ namespace eShopSolution.Data.Extensions
                     CategoryId = 1 }
                 );
 
+            // data seeding cho AppRoles: ở đây tạo role admin
+            // can use any guid
+            var ROLE_ID = new Guid("5810934D-2E2A-4E8F-ABE6-A4F1EA58FE37");
+            modelBuilder.Entity<AppRole>().HasData(new AppRole
+            {
+                Id = ROLE_ID,     
+                Name = "admin",
+                NormalizedName = "admin",
+                Description = "Administrator role"
+            });
+
+
+            // data seeding cho AppUsers: ở đây tạo user admin
+            // can use any guid
+            var ADMIN_ID = new Guid("F9898841-3761-47F9-8ED3-EBA4A62B2FE5");            
+
+            var hasher = new PasswordHasher<AppUser>();      // tạo 1 hasher cho entity AppUser
+            modelBuilder.Entity<AppUser>().HasData(new AppUser
+            {
+                Id = ADMIN_ID,    
+                UserName = "admin",     
+                NormalizedUserName = "admin",
+                Email = "ngoluuquocdat@gmail.com",
+                NormalizedEmail = "ngoluuquocdat@gmail.com",
+                EmailConfirmed = true,
+                PasswordHash = hasher.HashPassword(null, "123456"),   // password được hash từ plain text
+                SecurityStamp = string.Empty,
+                FirstName = "Quốc Đạt",
+                LastName = "Ngô Lưu",
+                Dob = new DateTime(2000,10,18)      // params: int year, int month, int day
+            });
+
+            // data seeding cho IdentityUserRole: gán user admin vào role admin
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = ROLE_ID,
+                UserId = ADMIN_ID
+            });
         }
     }
 }
