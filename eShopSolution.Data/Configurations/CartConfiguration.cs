@@ -13,6 +13,7 @@ namespace eShopSolution.Data.Configurations
         {
             builder.ToTable("Carts");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
 
             // 1-n: product - carts
             builder.HasOne(c => c.Product)
