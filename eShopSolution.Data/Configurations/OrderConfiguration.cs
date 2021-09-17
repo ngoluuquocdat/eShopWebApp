@@ -13,12 +13,9 @@ namespace eShopSolution.Data.Configurations
         {
             builder.ToTable("Orders");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
 
-            //builder.Property(x => x.Id).UseIdentityColumn();    mysql thì ko cần dùng cái này (?)
-            // nếu khóa chính có kiểu là int rồi thì nó tự auto Indentity luôn,
-            // còn khóa chính set kiểu khác (vd: string) thì ko có thuộc tính Indentity
-
-            builder.Property(x => x.OrderDate).HasDefaultValue(DateTime.Now);
+            builder.Property(x => x.OrderDate);
 
             builder.Property(x => x.ShipEmail).IsRequired().IsUnicode(false).HasMaxLength(50);
 

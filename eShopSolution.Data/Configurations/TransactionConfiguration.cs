@@ -14,6 +14,7 @@ namespace eShopSolution.Data.Configurations
             builder.ToTable("Transactions");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
 
             // 1-n: AppUser - Transactions
             builder.HasOne(tr => tr.AppUser)
