@@ -1,4 +1,6 @@
-﻿using eShopSolution.ViewModels.Catalog.Common;
+﻿
+using eShopSolution.ViewModels.Catalog.Common;
+using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -20,6 +22,9 @@ namespace eShopSolution.Application.Catalog.Products
         // xóa product
         Task<int> Delete(int ProductId);
 
+        // get product by Id
+        Task<ProductViewModel> GetById(int ProductId, string languageId);
+
         // cập nhật giá
         Task<bool> UpdatePrice(int ProductId, decimal new_price);
 
@@ -34,15 +39,18 @@ namespace eShopSolution.Application.Catalog.Products
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
 
         // method thêm ảnh vào list ảnh của 1 product
-        Task<int> AddImages(int productId, ProductImageCreateRequest request);
+        Task<int> AddImage(int productId, ProductImageCreateRequest request);
 
         // method xoá ảnh khỏi list ảnh của 1 product
-        Task<int> RemoveImages(int imageId);
+        Task<int> RemoveImage(int imageId);
 
-        // method update nội dung của ảnh   (ko làm update file ảnh nữa vì có delete với add rồi)
-        Task<int> UpdateImages(int imageId, ProductImageUpdateRequest request);
+        // method update ảnh theo id ảnh  
+        Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
 
         // method get list ảnh của 1 product
         Task<List<ProductImageViewModel>> GetListImages(int productId);
+
+        // method get 1 ảnh theo id
+        Task<ProductImageViewModel> GetImageById(int imageId);
     }
 }
