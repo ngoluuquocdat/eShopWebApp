@@ -45,6 +45,8 @@ namespace eShopSolution.Application.System.Users
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            // tham số đầu tiên là issuer, tham số thứ 2 là audience
+            // ở đây nơi tạo và nơi nhận JWT là 1 nên để giống nhau
             var token = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
