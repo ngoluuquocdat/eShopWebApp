@@ -1,7 +1,6 @@
-﻿
-using eShopSolution.ViewModels.Catalog.Common;
-using eShopSolution.ViewModels.Catalog.ProductImages;
+﻿using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.Application.Catalog.Products
 {
-    public interface IManageProductService
+    public interface IProductService
     {
         // thêm mới product
         Task<int> Create(ProductCreateRequest request);    // trả về số bảng ghi đc thêm, 
@@ -52,5 +51,9 @@ namespace eShopSolution.Application.Catalog.Products
 
         // method get 1 ảnh theo id
         Task<ProductImageViewModel> GetImageById(int imageId);
+
+        // method get products by category dành cho Public
+        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
+        // GetProductPagingRequest lúc này là class ở public, không phải ở manage
     }
 }

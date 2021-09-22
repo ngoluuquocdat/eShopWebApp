@@ -12,6 +12,7 @@ namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -26,26 +27,59 @@ namespace eShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var resultToken = await _userService.Authenticate(request);
-            if(string.IsNullOrEmpty(resultToken))
+            var api_result = await _userService.Authenticate(request);
+            // check có token được trả về hay không
+            if(string.IsNullOrEmpty(api_result.ResultObj))
             {
-                return BadRequest("UserName or Password is incorrect.");
+                return BadRequest(api_result);
             }
-            return Ok(resultToken);
+  
+            return Ok(api_result);
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody]RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+                //return BadRequest(ModelState);
+                return BadRequest("Invalid");
+            var result = await _userService.Register(request);
+            if (result.IsSuccessed == false)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        //PUT: http ://localhost/api/users/id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody]UserUpdateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var result = await _userService.Register(request);
-            if (result == false)
+
+            var result = await _userService.Update(id, request);
+            if (!result.IsSuccessed)
             {
-                return BadRequest("Register NOT success.");
+                return BadRequest(result);
             }
-            return Ok("Register successful.");
+            return Ok(result);
+        }
+
+        //http ://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery]GetUsersPagingRequest request)
+        {
+            var users = await _userService.GetUsersPaging(request);
+            return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var user = await _userService.GetById(id);
+            return Ok(user);
         }
     }
 }

@@ -18,15 +18,12 @@ namespace eShopSolution.BackendApi.Controllers
     [Authorize]
     public class ProductsController : ControllerBase
     {
-        private readonly IPublicProductService _publicProductService;
-        private readonly IManageProductService _manageProductService;
+        private readonly IProductService _productService;
 
         //constructor
-        public ProductsController(IPublicProductService publicProductService,
-            IManageProductService manageProductService)
+        public ProductsController(IProductService productService)
         {
-            _publicProductService = publicProductService;
-            _manageProductService = manageProductService;
+            _productService = productService;
         }
         // ------------------------------METHODs FOR PUBLIC-----------------------------
 
@@ -35,7 +32,7 @@ namespace eShopSolution.BackendApi.Controllers
         public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] GetPublicProductPagingRequest request)
         // [FromQuery]: chỉ định rằng các tham số của hàm được lấy từ url/query(?)
         {
-            var products = await _publicProductService.GetAllByCategoryId(languageId,request);
+            var products = await _productService.GetAllByCategoryId(languageId,request);
             return Ok(products);
         }
 
@@ -49,7 +46,7 @@ namespace eShopSolution.BackendApi.Controllers
         // thành phần này phải trùng luôn với tên của param trong hàm thì hàm mới xác định được
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
-            var product = await _manageProductService.GetById(productId, languageId);
+            var product = await _productService.GetById(productId, languageId);
             if (product == null)
                 return BadRequest("Cannot find product");
             return Ok(product);
@@ -61,10 +58,10 @@ namespace eShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            int productId = await _manageProductService.Create(request);
+            int productId = await _productService.Create(request);
             if (productId == 0)
                 return BadRequest();    // trạng thái lỗi 400
-            var new_product = await _manageProductService.GetById(productId, request.LanguageId);
+            var new_product = await _productService.GetById(productId, request.LanguageId);
             //return Created(nameof(GetById), new_product);       // trạng thái 201, trả về 1 url và 1 obj
             return CreatedAtAction(nameof(GetById), new { id = productId}, new_product);
         }
@@ -74,7 +71,7 @@ namespace eShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            int affectedRecords = await _manageProductService.Update(request);
+            int affectedRecords = await _productService.Update(request);
             if (affectedRecords == 0)
                 return BadRequest();    // trạng thái lỗi 400            
             return Ok("Updated successfully!");
@@ -85,7 +82,7 @@ namespace eShopSolution.BackendApi.Controllers
         // trùng luôn với tên của param trong hàm thì hàm mới xác định được
         public async Task<IActionResult> Delete(int productId)
         {
-            int affectedRecords = await _manageProductService.Delete(productId);
+            int affectedRecords = await _productService.Delete(productId);
             if (affectedRecords == 0)
                 return BadRequest();    // trạng thái lỗi 400            
             return Ok("Deleted successfully!");
@@ -94,7 +91,7 @@ namespace eShopSolution.BackendApi.Controllers
         [HttpPatch("{productId}/{newPrice}")]     // httpPatch: update 1 phần bản ghi
         public async Task<IActionResult> UpdatePrice(int productId, decimal newPrice)
         {
-            bool isSuccess = await _manageProductService.UpdatePrice(productId, newPrice);
+            bool isSuccess = await _productService.UpdatePrice(productId, newPrice);
             if (!isSuccess)
                 return BadRequest();    // trạng thái lỗi 400            
             return Ok("Updated Price successfully!");
@@ -110,10 +107,10 @@ namespace eShopSolution.BackendApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            int imageId = await _manageProductService.AddImage(productId, request);
+            int imageId = await _productService.AddImage(productId, request);
             if (imageId == 0)
                 return BadRequest();    // trạng thái lỗi 400
-            var new_image = await _manageProductService.GetImageById(imageId);           
+            var new_image = await _productService.GetImageById(imageId);           
             return CreatedAtAction(nameof(GetImageById), new { id = imageId }, new_image);
         }
 
@@ -123,7 +120,7 @@ namespace eShopSolution.BackendApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            int affectedRecords = await _manageProductService.UpdateImage(imageId, request);
+            int affectedRecords = await _productService.UpdateImage(imageId, request);
             if (affectedRecords == 0)
                 return BadRequest();    // trạng thái lỗi 400
             return Ok("Image updated successfully!");
@@ -135,7 +132,7 @@ namespace eShopSolution.BackendApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            int affectedRecords = await _manageProductService.RemoveImage(imageId);
+            int affectedRecords = await _productService.RemoveImage(imageId);
             if (affectedRecords == 0)
                 return BadRequest();    // trạng thái lỗi 400
             return Ok("Image deleted!");
@@ -144,7 +141,7 @@ namespace eShopSolution.BackendApi.Controllers
         [HttpGet("{productId}/images/{imageId}")]
         public async Task<IActionResult> GetImageById(int productId, int imageId)
         {
-            var image = await _manageProductService.GetImageById(imageId);
+            var image = await _productService.GetImageById(imageId);
             if (image == null)
                 return BadRequest("Cannot find product");
             return Ok(image);
