@@ -63,6 +63,8 @@ namespace eShopSolution.AdminApp.Controllers
 
             // lưu/đẩy token này vào session, với key="Token", value là cái token
             HttpContext.Session.SetString("Token", result.ResultObj);
+            // lưu default languageId vào session
+            HttpContext.Session.SetString("DefaultLanguageId", _configuration["DefaultLanguageId"]);
 
             await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,

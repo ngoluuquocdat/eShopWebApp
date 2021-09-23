@@ -1,5 +1,6 @@
 ﻿using eShopSolution.AdminApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -36,6 +37,16 @@ namespace eShopSolution.AdminApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        public IActionResult Language(NavigationViewModel viewModel)
+        {
+            // hàm này để đẩy DefaultLanguageId lên session mỗi khi click đổi ngôn ngữ
+            // sau đó load lại trang Index
+            HttpContext.Session.SetString("DefaultLanguageId", viewModel.CurrentLanguageId);
+
+            return RedirectToAction("Index");
         }
     }
 }
