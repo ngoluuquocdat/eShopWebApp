@@ -41,10 +41,17 @@ namespace eShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Index(LoginRequest request)
         {
             if (!ModelState.IsValid)
-                return View(ModelState);
+                //return View(ModelState);
+                return View();
 
             var result = await _userApiClient.Authenticate(request);
 
+            // nếu không nhận đc token từ Api thì return về view đăng nhập lại
+            if(result.ResultObj == null)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View();
+            }
             var userPrincipal = this.ValidateToken(result.ResultObj);
 
             // các thuộc tính về authenticate

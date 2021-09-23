@@ -48,6 +48,20 @@ namespace eShopSolution.AdminApp.Service
             return JsonConvert.DeserializeObject<ApiErrorResult<string>>(result_json);
         }
 
+        public async Task<ApiResult<bool>> Delete(Guid id)
+        {
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+            var response = await client.DeleteAsync($"/api/users/{id}");
+            var result_json = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result_json);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result_json);
+        }
+
         public async Task<ApiResult<UserVm>> GetById(Guid Id)
         {
             // lấy token từ session
@@ -112,6 +126,30 @@ namespace eShopSolution.AdminApp.Service
             {
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result_json);
             }
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result_json);
+        }
+
+        public async Task<ApiResult<bool>> RoleAssign(Guid Id, RoleAssignRequest request)
+        {
+            // lấy token từ session
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:5001");
+
+            // add token vào header Authentication của request
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var request_json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(request_json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/users/{Id}/roles", httpContent);
+
+            var result_json = await response.Content.ReadAsStringAsync();
+
+            if(response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result_json);
+
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result_json);
         }
 
