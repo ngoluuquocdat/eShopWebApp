@@ -101,7 +101,7 @@ namespace eShopSolution.Application.Catalog.Products
             return await _context.SaveChangesAsync();       // trả về số bảng ghi đc xóa khỏi Db (?)
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
             // ------------bước 1. Select join ---------------------
             // vì là tìm theo tên (keyword), mà tên thì nằm trong ProductTranslation,
@@ -112,6 +112,63 @@ namespace eShopSolution.Application.Catalog.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
+                        where pt.LanguageId == languageId
+                        select new { p, pt, pic };
+            // ------------bước 2. Filter ---------------------
+            // x ở đây là 1 bảng ghi trong query.
+            // 1 bảng ghi trong query bây giờ có 3 thứ:
+            // product, productTranslation và productInCategory, theo select ở dòng 82 (hover vào x để kiếm chứng)
+
+            if (request.CategoryId.HasValue && request.CategoryId.Value > 0)   // nếu có bất kì tìm kiếm nào về Category
+                query = query.Where(x => x.pic.CategoryId == request.CategoryId);
+
+
+            // ------------bước 3. paging - phân trang ---------------------
+            int totalRow = await query.CountAsync();
+
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize).Select(x => new ProductViewModel()     // x chỗ này vẫn là 1 bảng ghi trong query
+                {
+                    Id = x.p.Id,
+                    Name = x.pt.Name,
+                    DateCreated = x.p.DateCreated,
+                    Description = x.pt.Description,
+                    Details = x.pt.Details,
+                    LanguageId = x.pt.LanguageId,
+                    OriginalPrice = x.p.OriginalPrice,
+                    Price = x.p.Price,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoDescription = x.pt.SeoDescription,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount
+                }).ToListAsync();
+
+
+            // ------------bước 4. select and projection ---------------------
+            var pageResult = new PagedResult<ProductViewModel>()
+            {
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Items = data
+            };
+            return pageResult;
+        }
+
+        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
+        {
+            // này cho admin
+            // ------------bước 1. Select join ---------------------
+            // vì là tìm theo tên (keyword), mà tên thì nằm trong ProductTranslation,
+            // nên ở đây phải dùng Inner Join:
+            // bảng products (p) join với bảng productTranslations (pt)
+            // bảng products join với bảng productInCategories (pic)
+            var query = from p in _context.Products
+                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId
+                        join c in _context.Categories on pic.CategoryId equals c.Id
+                        where pt.LanguageId == request.LanguageId
                         select new { p, pt, pic };
             // ------------bước 2. Filter ---------------------
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -120,7 +177,7 @@ namespace eShopSolution.Application.Catalog.Products
                 // 1 bảng ghi trong query bây giờ có 3 thứ:
                 // product, productTranslation và productInCategory, theo select ở dòng 82 (hover vào x để kiếm chứng)
 
-            if (request.CategoryIds.Count > 0)   // nếu có bất kì tìm kiếm nào về Category
+            if (request.CategoryIds != null && request.CategoryIds.Count > 0)   // nếu có bất kì tìm kiếm nào về Category
                 query = query.Where(x => request.CategoryIds.Contains(x.pic.CategoryId));
             // dòng 86, 87 có nghĩa là: lấy các product có category nằm trong đống request.category
             // x chỗ này vẫn là 1 bảng ghi trong query
@@ -343,59 +400,6 @@ namespace eShopSolution.Application.Catalog.Products
             return imageViewModel;
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
-        {
-            // ------------bước 1. Select join ---------------------
-            // vì là tìm theo tên (keyword), mà tên thì nằm trong ProductTranslation,
-            // nên ở đây phải dùng Inner Join:
-            // bảng products (p) join với bảng productTranslations (pt)
-            // bảng products join với bảng productInCategories (pic)
-            var query = from p in _context.Products
-                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-                        join c in _context.Categories on pic.CategoryId equals c.Id
-                        where pt.LanguageId == languageId
-                        select new { p, pt, pic };
-            // ------------bước 2. Filter ---------------------
-            // x ở đây là 1 bảng ghi trong query.
-            // 1 bảng ghi trong query bây giờ có 3 thứ:
-            // product, productTranslation và productInCategory, theo select ở dòng 82 (hover vào x để kiếm chứng)
-
-            if (request.CategoryId.HasValue && request.CategoryId.Value > 0)   // nếu có bất kì tìm kiếm nào về Category
-                query = query.Where(x => x.pic.CategoryId == request.CategoryId);
-
-
-            // ------------bước 3. paging - phân trang ---------------------
-            int totalRow = await query.CountAsync();
-
-            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize).Select(x => new ProductViewModel()     // x chỗ này vẫn là 1 bảng ghi trong query
-                {
-                    Id = x.p.Id,
-                    Name = x.pt.Name,
-                    DateCreated = x.p.DateCreated,
-                    Description = x.pt.Description,
-                    Details = x.pt.Details,
-                    LanguageId = x.pt.LanguageId,
-                    OriginalPrice = x.p.OriginalPrice,
-                    Price = x.p.Price,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoDescription = x.pt.SeoDescription,
-                    SeoTitle = x.pt.SeoTitle,
-                    Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount
-                }).ToListAsync();
-
-
-            // ------------bước 4. select and projection ---------------------
-            var pageResult = new PagedResult<ProductViewModel>()
-            {
-                TotalRecords = totalRow,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                Items = data
-            };
-            return pageResult;
-        }
+        
     }
 }

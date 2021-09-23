@@ -28,17 +28,25 @@ namespace eShopSolution.BackendApi.Controllers
         // ------------------------------METHODs FOR PUBLIC-----------------------------
 
         // http://localhost:port/products?pageIndex=1&pageSize=10&CategoryId=1
-        [HttpGet("{languageId}")]
-        public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] GetPublicProductPagingRequest request)
-        // [FromQuery]: chỉ định rằng các tham số của hàm được lấy từ url/query(?)
-        {
-            var products = await _productService.GetAllByCategoryId(languageId,request);
-            return Ok(products);
-        }
+        //[HttpGet("{languageId}")]
+        //public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] GetPublicProductPagingRequest request)
+        //// [FromQuery]: chỉ định rằng các tham số của hàm được lấy từ url/query(?)
+        //{
+        //    var products = await _productService.GetAllByCategoryId(languageId,request);
+        //    return Ok(products);
+        //}
+
 
         // -----------------------------------------------------------------------------
 
         // ------------------------------METHODs FOR MANAGE-----------------------------
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
+        {
+            var products = await _productService.GetAllPaging(request);
+            return Ok(products);
+        }
 
         // http://localhost:port/products/1/vi-VN
         [HttpGet("{productId}/{languageId}")]    
