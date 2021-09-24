@@ -177,9 +177,8 @@ namespace eShopSolution.Application.Catalog.Products
                 // 1 bảng ghi trong query bây giờ có 3 thứ:
                 // product, productTranslation và productInCategory, theo select ở dòng 82 (hover vào x để kiếm chứng)
 
-            if (request.CategoryIds != null && request.CategoryIds.Count > 0)   // nếu có bất kì tìm kiếm nào về Category
-                query = query.Where(x => request.CategoryIds.Contains(x.pic.CategoryId));
-            // dòng 86, 87 có nghĩa là: lấy các product có category nằm trong đống request.category
+            if (request.CategoryId != null && request.CategoryId !=  0)   // nếu có bất kì tìm kiếm nào về Category
+                query = query.Where(x => request.CategoryId == x.pic.CategoryId);
             // x chỗ này vẫn là 1 bảng ghi trong query
 
             // ------------bước 3. paging - phân trang ---------------------
@@ -203,7 +202,7 @@ namespace eShopSolution.Application.Catalog.Products
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount
                 }).ToListAsync();   // toListAsync ở đây nên phải có await ở đầu nhé (dòng 98)
-            /* giải thích dòng 93:
+            /* giải thích dòng 187:
              * Skip(n): bỏ qua n bảng ghi rồi mới bắt đầu lấy
              *          hàm này trả về các bảng ghi ngay sau index input - là n
              * Take(n): lấy n bảng ghi từ đầu của nguồn dữ liệu

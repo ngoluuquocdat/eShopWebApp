@@ -61,6 +61,7 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
         [HttpPost]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         // [FromBody]: chỉ định rằng tham số được lấy từ body của request gởi đến 
         {

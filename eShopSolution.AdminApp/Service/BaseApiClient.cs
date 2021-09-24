@@ -21,7 +21,9 @@ namespace eShopSolution.AdminApp.Service
             _httpClientFactory = httpClientFactory;
         }
 
-        // hàm dùng chung cho các request Get
+        // các hàm dùng chung cho các request Get
+
+        // hàm get về 1 object
         protected async Task<TResponse> GetAsync<TResponse>(string url)
         {
 
@@ -45,6 +47,27 @@ namespace eShopSolution.AdminApp.Service
                 return myDeserializedObjList;
             }
             return JsonConvert.DeserializeObject<TResponse>(result_json);
+        }
+
+        // hàm get về 1 list obj
+        // không dùng chung với 1 obj đc vì list sẽ phải Deserialize kiểu khác
+        public async Task<List<T>> GetListAsync<T>(string url, bool requiredLogin = false)
+        {
+            // lấy token từ session
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var response = await client.GetAsync(url);
+            var result_json = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var data = (List<T>)JsonConvert.DeserializeObject(result_json, typeof(List<T>));
+                return data;
+            }
+            throw new Exception(result_json);
         }
     }
 }

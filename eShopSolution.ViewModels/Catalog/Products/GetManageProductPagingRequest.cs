@@ -8,7 +8,7 @@ namespace eShopSolution.ViewModels.Catalog.Products
     public class GetManageProductPagingRequest : PagingRequestBase
     {
         public string Keyword { get; set; }          // keyword để tìm kiếm
-        public List<int> CategoryIds { get; set; }   // mảng các categoryId
         public string LanguageId { get; set; }
+        public int? CategoryId { get; set; }
     }
 }
