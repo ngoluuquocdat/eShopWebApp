@@ -21,8 +21,8 @@ namespace eShopSolution.Data.Extensions
             );
             //data seeding cho Languagues
             modelBuilder.Entity<Language>().HasData(
-                new Language() { Id="vi-VN", Name="Tiếng Việt", IsDefault=true},
-                new Language() { Id = "en-US", Name = "English", IsDefault = false });           
+                new Language() { Id="vi", Name="Tiếng Việt", IsDefault=true},
+                new Language() { Id ="en", Name = "English", IsDefault = false });           
 
             // data seeding cho Categories
             modelBuilder.Entity<Category>().HasData(
@@ -52,7 +52,7 @@ namespace eShopSolution.Data.Extensions
                     Id = 1,
                     CategoryId = 1,
                     Name = "Áo nam",
-                    LanguageId = "vi-VN",
+                    LanguageId = "vi",
                     SeoAlias = "ao-nam",
                     SeoDescription = "Sản phẩm áo thời trang nam",
                     SeoTitle = "Sản phẩm áo thời trang nam"
@@ -62,7 +62,7 @@ namespace eShopSolution.Data.Extensions
                     Id = 2,
                     CategoryId = 1,
                     Name = "Men Shirt",
-                    LanguageId = "en-US",
+                    LanguageId = "en",
                     SeoAlias = "men-shirt",
                     SeoDescription = "The shirt products for men",
                     SeoTitle = "The shirt products for men"
@@ -72,7 +72,7 @@ namespace eShopSolution.Data.Extensions
                     Id = 3,
                     CategoryId = 2,
                     Name = "Áo nữ",
-                    LanguageId = "vi-VN",
+                    LanguageId = "vi",
                     SeoAlias = "ao-nu",
                     SeoDescription = "Sản phẩm áo thời trang nữ",
                     SeoTitle = "Sản phẩm áo thời trang nữ"
@@ -82,7 +82,7 @@ namespace eShopSolution.Data.Extensions
                     Id = 4,
                     CategoryId = 2,
                     Name = "Women Shirt",
-                    LanguageId = "en-US",
+                    LanguageId = "en",
                     SeoAlias = "women-shirt",
                     SeoDescription = "The shirt products for women",
                     SeoTitle = "The shirt products for women"
@@ -109,7 +109,7 @@ namespace eShopSolution.Data.Extensions
                     Id = 1,
                     ProductId = 1,
                     Name = "Áo sát nách gym nam",
-                    LanguageId = "vi-VN",
+                    LanguageId = "vi",
                     SeoAlias = "ao-gym-nam",
                     SeoDescription = "Áo nam tập gym",
                     SeoTitle = "Áo nam tập gym",
@@ -121,7 +121,7 @@ namespace eShopSolution.Data.Extensions
                     Id = 2,
                     ProductId = 1,
                     Name = "Men Gym Sleeveless Shirt",
-                    LanguageId = "en-US",
+                    LanguageId = "en",
                     SeoAlias = "men-gym-shirt",
                     SeoDescription = "Sleeveless shirt for men gymmer",
                     SeoTitle = "Sleeveless shirt for men gymmer",

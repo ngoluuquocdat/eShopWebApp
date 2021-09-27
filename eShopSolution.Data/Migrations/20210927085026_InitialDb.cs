@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace eShopSolution.Data.Migrations
 {
-    public partial class AspNetCoreIdentityDatabase : Migration
+    public partial class InitialDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -222,7 +222,7 @@ namespace eShopSolution.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2021, 9, 15, 8, 35, 38, 5, DateTimeKind.Local).AddTicks(1789)),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ShipName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     ShipAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -328,6 +328,31 @@ namespace eShopSolution.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Caption = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: false),
+                    FileSize = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductImages_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductInCategories",
                 columns: table => new
                 {
@@ -420,6 +445,21 @@ namespace eShopSolution.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AppRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
+                values: new object[] { new Guid("5810934d-2e2a-4e8f-abe6-a4f1ea58fe37"), "09716b13-8e79-4029-8730-4c2b3e933f0a", "Administrator role", "admin", "admin" });
+
+            migrationBuilder.InsertData(
+                table: "AppUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { new Guid("5810934d-2e2a-4e8f-abe6-a4f1ea58fe37"), new Guid("f9898841-3761-47f9-8ed3-eba4a62b2fe5") });
+
+            migrationBuilder.InsertData(
+                table: "AppUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Dob", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { new Guid("f9898841-3761-47f9-8ed3-eba4a62b2fe5"), 0, "238390a7-30db-4415-b936-dc0195a0ffaa", new DateTime(2000, 10, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "ngoluuquocdat@gmail.com", true, "Quốc Đạt", "Ngô Lưu", false, null, "ngoluuquocdat@gmail.com", "admin", "AQAAAAEAACcQAAAAEFIILT58unRz0aAnrfaj5tYuLoWcWEEdcHuKwca1wAX0UiUKdbC22Dnn2uwT/DfCew==", null, false, "", false, "admin" });
+
+            migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "IsShowOnHome", "ParentId", "SortOrder", "Status" },
                 values: new object[,]
@@ -433,24 +473,24 @@ namespace eShopSolution.Data.Migrations
                 columns: new[] { "Id", "IsDefault", "Name" },
                 values: new object[,]
                 {
-                    { "vi-VN", true, "Tiếng Việt" },
-                    { "en-US", false, "English" }
+                    { "vi", true, "Tiếng Việt" },
+                    { "en", false, "English" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "DateCreated", "OriginalPrice", "Price" },
-                values: new object[] { 1, new DateTime(2021, 9, 15, 8, 35, 38, 22, DateTimeKind.Local).AddTicks(402), 100000m, 200000m });
+                values: new object[] { 1, new DateTime(2021, 9, 27, 15, 50, 26, 177, DateTimeKind.Local).AddTicks(4173), 100000m, 200000m });
 
             migrationBuilder.InsertData(
                 table: "CategoryTranslations",
                 columns: new[] { "Id", "CategoryId", "LanguageId", "Name", "SeoAlias", "SeoDescription", "SeoTitle" },
                 values: new object[,]
                 {
-                    { 1, 1, "vi-VN", "Áo nam", "ao-nam", "Sản phẩm áo thời trang nam", "Sản phẩm áo thời trang nam" },
-                    { 3, 2, "vi-VN", "Áo nữ", "ao-nu", "Sản phẩm áo thời trang nữ", "Sản phẩm áo thời trang nữ" },
-                    { 2, 1, "en-US", "Men Shirt", "men-shirt", "The shirt products for men", "The shirt products for men" },
-                    { 4, 2, "en-US", "Women Shirt", "women-shirt", "The shirt products for women", "The shirt products for women" }
+                    { 1, 1, "vi", "Áo nam", "ao-nam", "Sản phẩm áo thời trang nam", "Sản phẩm áo thời trang nam" },
+                    { 3, 2, "vi", "Áo nữ", "ao-nu", "Sản phẩm áo thời trang nữ", "Sản phẩm áo thời trang nữ" },
+                    { 2, 1, "en", "Men Shirt", "men-shirt", "The shirt products for men", "The shirt products for men" },
+                    { 4, 2, "en", "Women Shirt", "women-shirt", "The shirt products for women", "The shirt products for women" }
                 });
 
             migrationBuilder.InsertData(
@@ -463,8 +503,8 @@ namespace eShopSolution.Data.Migrations
                 columns: new[] { "Id", "Description", "Details", "LanguageId", "Name", "ProductId", "SeoAlias", "SeoDescription", "SeoTitle" },
                 values: new object[,]
                 {
-                    { 1, "", "chi tiết sản phẩm", "vi-VN", "Áo sát nách gym nam", 1, "ao-gym-nam", "Áo nam tập gym", "Áo nam tập gym" },
-                    { 2, "", "product details", "en-US", "Men Gym Sleeveless Shirt", 1, "men-gym-shirt", "Sleeveless shirt for men gymmer", "Deep cut sleeveless shirt, oversized from" }
+                    { 1, "Áo sát nách khoét sâu, form rộng", "chi tiết sản phẩm", "vi", "Áo sát nách gym nam", 1, "ao-gym-nam", "Áo nam tập gym", "Áo nam tập gym" },
+                    { 2, "Deep cut sleeveless shirt, oversized formed", "product details", "en", "Men Gym Sleeveless Shirt", 1, "men-gym-shirt", "Sleeveless shirt for men gymmer", "Sleeveless shirt for men gymmer" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -496,6 +536,11 @@ namespace eShopSolution.Data.Migrations
                 name: "IX_Orders_UserId",
                 table: "Orders",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductImages_ProductId",
+                table: "ProductImages",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductInCategories_ProductId",
@@ -552,6 +597,9 @@ namespace eShopSolution.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderDetails");
+
+            migrationBuilder.DropTable(
+                name: "ProductImages");
 
             migrationBuilder.DropTable(
                 name: "ProductInCategories");

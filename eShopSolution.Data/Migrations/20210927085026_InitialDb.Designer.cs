@@ -10,8 +10,8 @@ using eShopSolution.Data.EF;
 namespace eShopSolution.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    [Migration("20210916012831_AddProductImageTable")]
-    partial class AddProductImageTable
+    [Migration("20210927085026_InitialDb")]
+    partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -182,7 +182,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("5810934d-2e2a-4e8f-abe6-a4f1ea58fe37"),
-                            ConcurrencyStamp = "5dabe6d5-c03f-4c3b-8ca8-f5528e6a2efc",
+                            ConcurrencyStamp = "09716b13-8e79-4029-8730-4c2b3e933f0a",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -259,7 +259,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = new Guid("f9898841-3761-47f9-8ed3-eba4a62b2fe5"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "230a3e87-022e-43cd-9404-4a4cc4ed6a6c",
+                            ConcurrencyStamp = "238390a7-30db-4415-b936-dc0195a0ffaa",
                             Dob = new DateTime(2000, 10, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "ngoluuquocdat@gmail.com",
                             EmailConfirmed = true,
@@ -268,7 +268,7 @@ namespace eShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ngoluuquocdat@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOViufXbih0S6ejIwM99Ng9264TA4lzVFhKdo1hZaoeVj10JxF5AwIX/8bl2AUkESg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFIILT58unRz0aAnrfaj5tYuLoWcWEEdcHuKwca1wAX0UiUKdbC22Dnn2uwT/DfCew==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -402,7 +402,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            LanguageId = "vi-VN",
+                            LanguageId = "vi",
                             Name = "Áo nam",
                             SeoAlias = "ao-nam",
                             SeoDescription = "Sản phẩm áo thời trang nam",
@@ -412,7 +412,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            LanguageId = "en-US",
+                            LanguageId = "en",
                             Name = "Men Shirt",
                             SeoAlias = "men-shirt",
                             SeoDescription = "The shirt products for men",
@@ -422,7 +422,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 3,
                             CategoryId = 2,
-                            LanguageId = "vi-VN",
+                            LanguageId = "vi",
                             Name = "Áo nữ",
                             SeoAlias = "ao-nu",
                             SeoDescription = "Sản phẩm áo thời trang nữ",
@@ -432,7 +432,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 4,
                             CategoryId = 2,
-                            LanguageId = "en-US",
+                            LanguageId = "en",
                             Name = "Women Shirt",
                             SeoAlias = "women-shirt",
                             SeoDescription = "The shirt products for women",
@@ -498,13 +498,13 @@ namespace eShopSolution.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "vi-VN",
+                            Id = "vi",
                             IsDefault = true,
                             Name = "Tiếng Việt"
                         },
                         new
                         {
-                            Id = "en-US",
+                            Id = "en",
                             IsDefault = false,
                             Name = "English"
                         });
@@ -613,7 +613,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 9, 16, 8, 28, 30, 951, DateTimeKind.Local).AddTicks(5614),
+                            DateCreated = new DateTime(2021, 9, 27, 15, 50, 26, 177, DateTimeKind.Local).AddTicks(4173),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
@@ -637,8 +637,8 @@ namespace eShopSolution.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FileSize")
-                        .HasColumnType("int");
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
@@ -738,7 +738,7 @@ namespace eShopSolution.Data.Migrations
                             Id = 1,
                             Description = "Áo sát nách khoét sâu, form rộng",
                             Details = "chi tiết sản phẩm",
-                            LanguageId = "vi-VN",
+                            LanguageId = "vi",
                             Name = "Áo sát nách gym nam",
                             ProductId = 1,
                             SeoAlias = "ao-gym-nam",
@@ -750,7 +750,7 @@ namespace eShopSolution.Data.Migrations
                             Id = 2,
                             Description = "Deep cut sleeveless shirt, oversized formed",
                             Details = "product details",
-                            LanguageId = "en-US",
+                            LanguageId = "en",
                             Name = "Men Gym Sleeveless Shirt",
                             ProductId = 1,
                             SeoAlias = "men-gym-shirt",
