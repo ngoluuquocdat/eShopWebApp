@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eShopSolution.ViewModels.Catalog.Categories;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,5 +20,8 @@ namespace eShopSolution.ViewModels.Catalog.Products
         public string SeoTitle { set; get; }
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
+
+        // Categories này chỉ là list cateogory name thôi, cho nên để là <string>
+        public List<string> Categories { get; set; } = new List<string>();
     }
 }

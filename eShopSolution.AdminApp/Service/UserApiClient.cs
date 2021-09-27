@@ -32,6 +32,8 @@ namespace eShopSolution.AdminApp.Service
             // body của request
             var httpContent = new StringContent(request_json, Encoding.UTF8, "application/json");
 
+            var httpContent_string = await httpContent.ReadAsStringAsync();
+
             var client = _httpClientFactory.CreateClient();
             // kiểu (post, put,...) và link thì tương ứng với method của API
             client.BaseAddress = new Uri("https://localhost:5001");

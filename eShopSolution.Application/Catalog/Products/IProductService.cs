@@ -55,5 +55,8 @@ namespace eShopSolution.Application.Catalog.Products
         // method get products by category dành cho Public
         Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
         // GetProductPagingRequest lúc này là class ở public, không phải ở manage
+
+        // method gán category cho sản phẩm
+        Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
     }
 }
