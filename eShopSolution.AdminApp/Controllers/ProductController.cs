@@ -1,4 +1,4 @@
-﻿using eShopSolution.AdminApp.Service;
+﻿using eShopSolution.ApiIntegration;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;

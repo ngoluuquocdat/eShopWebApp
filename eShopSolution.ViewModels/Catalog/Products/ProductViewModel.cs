@@ -19,7 +19,10 @@ namespace eShopSolution.ViewModels.Catalog.Products
         public string SeoDescription { set; get; }
         public string SeoTitle { set; get; }
         public string SeoAlias { get; set; }
+        public bool? IsFeatured { get; set; }
         public string LanguageId { set; get; }
+
+        public string ThumbnailImage { get; set; }      // thumbnail image path
 
         // Categories này chỉ là list cateogory name thôi, cho nên để là <string>
         public List<string> Categories { get; set; } = new List<string>();

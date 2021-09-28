@@ -58,5 +58,8 @@ namespace eShopSolution.Application.Catalog.Products
 
         // method gán category cho sản phẩm
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
+
+        // method get các sản phẩm featured
+        Task<List<ProductViewModel>> GetFeaturedProducts(string languageId, int take);
     }
 }

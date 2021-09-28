@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace eShopSolution.AdminApp.Service
+namespace eShopSolution.ApiIntegration
 {
     public class BaseApiClient
     {

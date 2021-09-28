@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace eShopSolution.AdminApp.Service
+namespace eShopSolution.ApiIntegration
 {
     public interface IProductApiClient
     {
@@ -13,6 +13,8 @@ namespace eShopSolution.AdminApp.Service
         Task<bool> CreateProduct(ProductCreateRequest request);
         Task<ProductViewModel> GetById(int id, string languageId);
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
-       
+
+        Task<List<ProductViewModel>> GetFeaturedProducts(string languageId, int take);
+
     }
 }

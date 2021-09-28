@@ -140,19 +140,30 @@ namespace eShopSolution.Data.Extensions
 
             // data seeding cho AppRoles: ở đây tạo role admin
             // can use any guid
-            var ROLE_ID = new Guid("5810934D-2E2A-4E8F-ABE6-A4F1EA58FE37");
-            modelBuilder.Entity<AppRole>().HasData(new AppRole
-            {
-                Id = ROLE_ID,     
-                Name = "admin",
-                NormalizedName = "admin",
-                Description = "Administrator role"
-            });
+            var ADMIN_ROLE_ID = new Guid("5810934D-2E2A-4E8F-ABE6-A4F1EA58FE37");
+            var USER_ROLE_ID = new Guid("C4E9559F-505B-44C8-B1BA-1701739B6AE7");
+            modelBuilder.Entity<AppRole>().HasData(
+                new AppRole()
+                {
+                    Id = ADMIN_ROLE_ID,     
+                    Name = "admin",
+                    NormalizedName = "admin",
+                    Description = "Administrator role"
+                },
+                new AppRole()
+                {
+                    Id = USER_ROLE_ID,
+                    Name = "user",
+                    NormalizedName = "user",
+                    Description = "Normal User role"
+                }
+            );
 
 
             // data seeding cho AppUsers: ở đây tạo user admin
             // can use any guid
-            var ADMIN_ID = new Guid("F9898841-3761-47F9-8ED3-EBA4A62B2FE5");            
+            var ADMIN_ID = new Guid("F9898841-3761-47F9-8ED3-EBA4A62B2FE5");
+            
 
             var hasher = new PasswordHasher<AppUser>();      // tạo 1 hasher cho entity AppUser
             modelBuilder.Entity<AppUser>().HasData(new AppUser
@@ -173,9 +184,18 @@ namespace eShopSolution.Data.Extensions
             // data seeding cho IdentityUserRole: gán user admin vào role admin
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
             {
-                RoleId = ROLE_ID,
+                RoleId = ADMIN_ROLE_ID,
                 UserId = ADMIN_ID
             });
+
+            modelBuilder.Entity<Slide>().HasData(
+              new Slide() { Id = 1, Name = "Second Thumbnail label", Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.", SortOrder = 1, Url = "#", Image = "/themes/images/carousel/1.png", Status = Status.Active },
+              new Slide() { Id = 2, Name = "Second Thumbnail label", Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.", SortOrder = 2, Url = "#", Image = "/themes/images/carousel/2.png", Status = Status.Active },
+              new Slide() { Id = 3, Name = "Second Thumbnail label", Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.", SortOrder = 3, Url = "#", Image = "/themes/images/carousel/3.png", Status = Status.Active },
+              new Slide() { Id = 4, Name = "Second Thumbnail label", Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.", SortOrder = 4, Url = "#", Image = "/themes/images/carousel/4.png", Status = Status.Active },
+              new Slide() { Id = 5, Name = "Second Thumbnail label", Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.", SortOrder = 5, Url = "#", Image = "/themes/images/carousel/5.png", Status = Status.Active },
+              new Slide() { Id = 6, Name = "Second Thumbnail label", Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.", SortOrder = 6, Url = "#", Image = "/themes/images/carousel/6.png", Status = Status.Active }
+              );
         }
     }
 }

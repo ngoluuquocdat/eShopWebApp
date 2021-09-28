@@ -11,6 +11,7 @@ namespace eShopSolution.Data.Entities
         public decimal OriginalPrice { get; set; }
         public int Stock { get; set; }
         public int ViewCount { get; set; }
+        public bool? IsFeatured { get; set; }
         public DateTime DateCreated { get; set; }
         //public int DateModified { get; set; }
 
