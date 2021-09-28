@@ -61,5 +61,8 @@ namespace eShopSolution.Application.Catalog.Products
 
         // method get các sản phẩm featured
         Task<List<ProductViewModel>> GetFeaturedProducts(string languageId, int take);
+
+        // method get các sản phẩm mới nhất
+        Task<List<ProductViewModel>> GetLatestProducts(string languageId, int take);
     }
 }
