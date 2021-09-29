@@ -13,13 +13,14 @@ namespace eShopSolution.AdminApp.Controllers
     public class BaseController : Controller
     {
         // check session trước khi vào controller
-        // vì userController kế thừa cái này, nên trc khi nó đc tạo thì thằng này chạy
+        // vì userController, productController,... kế thừa cái này,
+        // nên trc khi nó đc tạo thì thằng này chạy
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var sessions = context.HttpContext.Session.GetString("Token");
             if (sessions == null)
             {
-                // session mà null thì về login
+                // token mà null thì về login
                 context.Result = new RedirectToActionResult("Index", "Login", null);
             }
             base.OnActionExecuting(context);
