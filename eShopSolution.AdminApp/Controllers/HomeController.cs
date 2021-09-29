@@ -46,7 +46,7 @@ namespace eShopSolution.AdminApp.Controllers
             // sau đó load lại trang Index
             HttpContext.Session.SetString("DefaultLanguageId", viewModel.CurrentLanguageId);
 
-            return RedirectToAction("Index");
+            return Redirect(viewModel.ReturnUrl);
         }
     }
 }

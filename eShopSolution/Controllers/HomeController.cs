@@ -32,7 +32,7 @@ namespace eShopSolution.Controllers
         public async Task<IActionResult> Index()
         {
             var culture = CultureInfo.CurrentCulture.Name;  // languageId đây 
-            int take = 10;   // lấy 4 featured products
+            int take = 5;   // lấy 4 featured products
             var slides = await _slideApiClient.GetAll();
             var featuredProducts = await _productApiClient.GetFeaturedProducts(culture, take);
             var latestProducts = await _productApiClient.GetLatestProducts(culture, take);

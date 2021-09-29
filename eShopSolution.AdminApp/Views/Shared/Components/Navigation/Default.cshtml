@@ -14,6 +14,7 @@
         </div>
     </form>
     <form id="frmChangeLanguage" action="/Home/Language" method="post" class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+        <input type="hidden" name="ReturnUrl" value="@Context.Request.Path"/>
         <select class="form-control" onchange="this.form.submit()" asp-for="CurrentLanguageId" asp-items="@(new SelectList(Model.Languages, "Id", "Name", Model.CurrentLanguageId))"></select>"
     </form>
     <!-- Navbar-->

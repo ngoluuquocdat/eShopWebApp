@@ -42,6 +42,7 @@ namespace eShopSolution.BackendApi.Controllers
         // ------------------------------METHODs FOR MANAGE-----------------------------
 
         [HttpGet("paging")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
         {
             var products = await _productService.GetAllPaging(request);
@@ -49,7 +50,8 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
         // http://localhost:port/products/1/vi-VN
-        [HttpGet("{productId}/{languageId}")]    
+        [HttpGet("{productId}/{languageId}")]
+        [AllowAnonymous]
         // truyền thêm productId trong link, 
         // thành phần này phải trùng luôn với tên của param trong hàm thì hàm mới xác định được
         public async Task<IActionResult> GetById(int productId, string languageId)
@@ -91,7 +93,8 @@ namespace eShopSolution.BackendApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = productId}, new_product);
         }
 
-        [HttpPut]
+        [HttpPut("{productId}")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)

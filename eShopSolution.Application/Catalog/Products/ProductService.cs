@@ -37,6 +37,38 @@ namespace eShopSolution.Application.Catalog.Products
 
         public async Task<int> Create(ProductCreateRequest request)
         {
+            var translation_list = new List<ProductTranslation>();
+            var languages = _context.Languages;
+            foreach(var language in languages)
+            {
+                if(language.Id == request.LanguageId)
+                {
+                    translation_list.Add(new ProductTranslation()
+                    {
+                        // không cần khởi tạo khóa ngoại ProductId
+                        Name = request.Name,
+                        Description = request.Description,
+                        Details = request.Details,
+                        SeoDescription = request.SeoDescription,
+                        SeoAlias = request.SeoAlias,
+                        SeoTitle = request.SeoTitle,
+                        LanguageId = language.Id
+                    });
+                }
+                else       // không phải ngôn ngữ trong request thì cũng tạo translation nhưng để trống
+                {
+                    translation_list.Add(new ProductTranslation()
+                    {
+                        Name = "N/A",
+                        Description = "N/A",
+                        Details = "N/A",
+                        SeoDescription = "N/A",
+                        SeoAlias = "N/A",
+                        SeoTitle = "N/A",
+                        LanguageId = language.Id
+                    });
+                }
+            }    
             var product = new Product()
             {
                 Price = request.Price,
@@ -47,20 +79,7 @@ namespace eShopSolution.Application.Catalog.Products
                 // thêm mới dạng cha con như ở dưới: vì Id của new product lúc này chưa có trong Db
                 // nên có thể dùng cách này, khóa ngoại ProducId ở ProductTranslation sẽ
                 // được tự động map với Id của new product
-                ProductTranslations = new List<ProductTranslation>()
-                {
-                    new ProductTranslation
-                    {
-                        // không cần khởi tạo khóa ngoại ProductId
-                        Name = request.Name,
-                        Description = request.Description,
-                        Details = request.Details,
-                        SeoDescription = request.SeoDescription,
-                        SeoAlias = request.SeoAlias,
-                        SeoTitle = request.SeoTitle,
-                        LanguageId = request.LanguageId
-                    }
-                }
+                ProductTranslations = translation_list
 
             };
             // set thumbnail image for product
@@ -175,15 +194,23 @@ namespace eShopSolution.Application.Catalog.Products
                         select new { p, pt, pic }; 
             */
 
-            // kĩ thuật LEFT join:
+            //kĩ thuật LEFT join, để cho phép productInCategory và Category rỗng:
+            // cho phép luôn ProductImage rỗng
+            // nhưng vì có điều kiện  'pi.IsDefault == true' nên đéo có ảnh cũng đéo hiện được =)))
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
                         join c in _context.Categories on pic.CategoryId equals c.Id into picc
                         from c in picc.DefaultIfEmpty()
+                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
+                        //where pt.LanguageId == request.LanguageId && pi.IsDefault == true
                         where pt.LanguageId == request.LanguageId
-                        select new { p, pt, pic };
+                        select new { p, pt, pic, pi };
+
+
+
             // ------------bước 2. Filter ---------------------
             if (!string.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.pt.Name.Contains(request.Keyword));    
@@ -214,8 +241,9 @@ namespace eShopSolution.Application.Catalog.Products
                     SeoDescription = x.pt.SeoDescription,
                     SeoTitle = x.pt.SeoTitle,
                     Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount
-                }).ToListAsync();   // toListAsync ở đây nên phải có await ở đầu nhé (dòng 98)
+                    ViewCount = x.p.ViewCount,
+                    ThumbnailImage = x.pi.ImagePath
+                }).ToListAsync();   // toListAsync ở đây nên phải có await ở đầu nhé 
             /* giải thích dòng 187:
              * Skip(n): bỏ qua n bảng ghi rồi mới bắt đầu lấy
              *          hàm này trả về các bảng ghi ngay sau index input - là n
@@ -252,6 +280,7 @@ namespace eShopSolution.Application.Catalog.Products
                              where pic.ProductId == ProductId && ct.LanguageId == languageId
                              select ct.Name).ToListAsync();
 
+            var image = await _context.ProductImages.Where(x => x.ProductId == ProductId && x.IsDefault == true).FirstOrDefaultAsync();
 
             var productViewModel = new ProductViewModel()
             {
@@ -270,8 +299,8 @@ namespace eShopSolution.Application.Catalog.Products
                 SeoTitle = productTranslation != null ? productTranslation.SeoTitle : null,
                 Stock = product.Stock,
                 ViewCount = product.ViewCount,
-                Categories = categories
-
+                Categories = categories,
+                ThumbnailImage = image != null ? image.ImagePath : "no-image.jpg"
             };
             return productViewModel;
         }
@@ -304,6 +333,20 @@ namespace eShopSolution.Application.Catalog.Products
                     thumbnailImage.ImagePath = await this.SaveFile(request.ThumbnailImage);
                     _context.ProductImages.Update(thumbnailImage);
                 }    
+                else
+                {   // nếu chưa có ảnh thumbnail thì add ảnh thumbnail
+                    var new_thumbnailImage = new ProductImage()
+                    {
+                        Caption = "Thumbnail Image",
+                        DateCreated = DateTime.Now,
+                        IsDefault = true,
+                        ProductId = request.Id,
+                        SortOrder = 1
+                    };
+                    new_thumbnailImage.ImagePath = await this.SaveFile(request.ThumbnailImage);
+                    new_thumbnailImage.FileSize = request.ThumbnailImage.Length;
+                    _context.ProductImages.Add(new_thumbnailImage);
+                }
             }
             return await _context.SaveChangesAsync();   
         }

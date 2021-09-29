@@ -121,6 +121,10 @@
     <value>Thêm Vào</value>
     <comment>Views/Home/Index</comment>
   </data>
+  <data name="available products" xml:space="preserve">
+    <value>sản phẩm có sẵn</value>
+    <comment>Views/Products/Category.cshtml</comment>
+  </data>
   <data name="categoryUrl" xml:space="preserve">
     <value>danh-muc</value>
     <comment>Views/Shared/Components/SideBar/Default.cshmtl</comment>
@@ -141,6 +145,10 @@
     <value>Sản phẩm nổi bật</value>
     <comment>Views/Home/Index.cshtml</comment>
   </data>
+  <data name="Home" xml:space="preserve">
+    <value>Trang chủ</value>
+    <comment>Common</comment>
+  </data>
   <data name="Latest Products" xml:space="preserve">
     <value>Sản phẩm mới nhất</value>
     <comment>Views/Home/Index</comment>
@@ -149,9 +157,33 @@
     <value>Đăng nhập</value>
     <comment>Views/Shared/_Layout.cshtml</comment>
   </data>
+  <data name="More Details" xml:space="preserve">
+    <value>Thông tin thêm</value>
+    <comment>Common</comment>
+  </data>
+  <data name="New | Available" xml:space="preserve">
+    <value>Hàng mới | Có sẵn</value>
+    <comment>Common</comment>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Trang</value>
+    <comment>Common</comment>
+  </data>
+  <data name="Product Details" xml:space="preserve">
+    <value>Xem chi tiết</value>
+    <comment>Common</comment>
+  </data>
+  <data name="products" xml:space="preserve">
+    <value>san-pham</value>
+    <comment>Common</comment>
+  </data>
   <data name="productUrl" xml:space="preserve">
     <value>san-pham</value>
     <comment>Views/Home/Index</comment>
+  </data>
+  <data name="Related Products" xml:space="preserve">
+    <value>Sản phẩm tương tự</value>
+    <comment>Common</comment>
   </data>
   <data name="Specials Offer" xml:space="preserve">
     <value>Khuyến mãi </value>

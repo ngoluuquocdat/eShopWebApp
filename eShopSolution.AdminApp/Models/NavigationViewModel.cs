@@ -11,5 +11,6 @@ namespace eShopSolution.AdminApp.Models
         public List<LanguageVm> Languages { get; set; }
 
         public string CurrentLanguageId { get; set; }
+        public string ReturnUrl { get; set; }   // lưu url lúc chọn chuyển ngôn ngữ ở nav
     }
 }

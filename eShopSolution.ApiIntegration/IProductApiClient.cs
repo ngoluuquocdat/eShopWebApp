@@ -11,11 +11,15 @@ namespace eShopSolution.ApiIntegration
     {
         Task<PagedResult<ProductViewModel>> GetPagings(GetManageProductPagingRequest request);
         Task<bool> CreateProduct(ProductCreateRequest request);
-        Task<ProductViewModel> GetById(int id, string languageId);
-        Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
+        Task<bool> UpdateProduct(ProductUpdateRequest request);
+        Task<bool> DeleteProduct(int productId);
 
+
+        Task<ProductViewModel> GetById(int id, string languageId);
         Task<List<ProductViewModel>> GetFeaturedProducts(string languageId, int take);
         Task<List<ProductViewModel>> GetLatestProducts(string languageId, int take);
+
+        Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
 
     }
 }

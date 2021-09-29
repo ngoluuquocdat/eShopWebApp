@@ -109,7 +109,7 @@ namespace eShopSolution
             {
                 endpoints.MapControllerRoute(
                     name: "Product Category En",
-                    pattern: "{culture}/categories/{id}", 
+                    pattern: "{culture}/categories/{category_id}", 
                     new 
                     {
                         controller = "Products",
@@ -118,7 +118,7 @@ namespace eShopSolution
 
                 endpoints.MapControllerRoute(
                     name: "Product Category Vi",
-                    pattern: "{culture}/danh-muc/{id}",
+                    pattern: "{culture}/danh-muc/{category_id}",
                     new
                     {
                         controller = "Products",

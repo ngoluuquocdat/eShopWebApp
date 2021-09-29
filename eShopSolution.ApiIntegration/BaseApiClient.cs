@@ -69,5 +69,22 @@ namespace eShopSolution.ApiIntegration
             }
             throw new Exception(result_json);
         }
+
+
+        public async Task<bool> Delete(string url)
+        {
+            // lấy token từ session
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var response = await client.DeleteAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
